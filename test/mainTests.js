@@ -17,7 +17,6 @@ describe('Composition DB, API endpoints', function() {
 			mongoose.connection.db.dropDatabase(function() {
 				done();
 			});
-
 		});
 		it('comps resource has an index', function(done) {
 			chai.request(server)
