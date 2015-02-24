@@ -3,11 +3,6 @@
 var Comp = require('../models/Composition');
 var bodyParser = require('body-parser');
 
-function statSend(code, msg) {
-	return res.statusCode(code).send({'msg' : msg});
-}
-
-
 module.exports = function(app) {
 	app.use(bodyParser.json());
 

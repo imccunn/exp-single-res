@@ -10,9 +10,9 @@ var expect = chai.expect;
 
 var server = 'localhost:3000/api/v1';
 
-describe('Comps API endpoints', function() {
+describe('Composition DB, API endpoints', function() {
 
-	describe('comps route specific tests', function() {
+	describe('composition route specific request tests', function() {
 		after(function(done) {
 			mongoose.connection.db.dropDatabase(function() {
 				done();
@@ -58,7 +58,7 @@ describe('Comps API endpoints', function() {
 		describe('requests with data already in database', function() {
 			var year = new Date().getFullYear();
 			var id;
-			beforeEach(function(done) {
+			beforeEach(function(done) { // jshint ignore: line
 				chai.request(server)
 					.post('/comps')
 					.send({title: 'String Quartet no 5', year: year, composer: 'Bob'})
@@ -74,7 +74,7 @@ describe('Comps API endpoints', function() {
 					.end(function(err, res) {
 						expect(err).to.eql(null);
 						expect(res).to.have.status(200);
-						expect(Array.isArray(res.body)).to.be.true;
+						expect(Array.isArray(res.body)).to.be.true; // jshint ignore: line
 						expect(res.body[0]).to.have.property('title');
 						expect(res.body[0]).to.have.property('year');
 						expect(res.body[0]).to.have.property('composer');
@@ -89,8 +89,6 @@ describe('Comps API endpoints', function() {
 						expect(err).to.eql(null);
 						expect(res).to.have.status(200);
 						expect(res.body.title).to.eql('String Quartet no. 9');
-						expect(res.body.year).to.eql(year);
-						expect(res.body.yea)
 						done();
 					});
 			});
