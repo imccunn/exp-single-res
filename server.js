@@ -12,6 +12,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost/compsApp_dev');
 
 var app = express();
 app.set('unique', process.env.SECRET || 'changethis');
+console.log(app.get('unique'));
 app.use(passport.initialize());
 uAuth(passport);
 
@@ -28,9 +29,9 @@ var endpoint = {
   dev: '/api/v1'
 };
 
-app.use(endpoint['dev'], publicRouter);
-app.use(endpoint['dev'], userRouter);
-app.use(endpoint['dev'], compRouter);
+app.use(endpoint.dev, publicRouter);
+app.use(endpoint.dev, userRouter);
+app.use(endpoint.dev, compRouter);
 
 app.listen(process.env.PORT || 3000, function() {
 	console.log('Server listening on port ' + (process.env.PORT || 3000));

@@ -12,15 +12,43 @@ var server = 'localhost:3000/api/v1';
 
 describe('Composition DB, API endpoints', function() {
 
+	describe('user Routes creates a user', function() {
+		it('should create a user', function(done) {
+			chai.request(server)
+				.post('/create_user')
+				.send({email: 'neat@aol.com', password: 'neat'})
+				.end(function(err, res) {
+					expect(err).to.eql(null);
+					expect(res).to.have.status(200);
+					expect(res.body).to.have.property('eat');
+					done();
+				});
+		});
+	});
 	describe('composition route specific request tests', function() {
+		
 		after(function(done) {
 			mongoose.connection.db.dropDatabase(function() {
 				done();
 			});
 		});
+		var eat;
+		before(function(done) {
+			chai.request(server)
+				.post('/create_user')
+				.send({email: 'test@email.com', password: 'neat'})
+				.end(function(err, res) {
+					expect(err).to.eql(null);
+					expect(res).to.have.status(200);
+					expect(res.body).to.have.property('eat');
+					eat = res.body.eat;
+					done();
+				});
+		});
 		it('comps resource has an index', function(done) {
 			chai.request(server)
 				.get('/comps')
+				.send({eat: eat})
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res).to.have.status(200);
@@ -28,10 +56,11 @@ describe('Composition DB, API endpoints', function() {
 					done();
 				});
 		});
+
 		it('responds to post requests', function(done) {
 			chai.request(server)
 				.post('/comps')
-				.send({title: 'String Quartet no. 5', year: 2000, composer: 'Ian McCunn'})
+				.send({eat: eat, title: 'String Quartet no. 5', year: 2000, composer: 'Ian McCunn'})
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res.body).to.have.property('_id');
@@ -45,7 +74,7 @@ describe('Composition DB, API endpoints', function() {
 		it('post request without all values should manifest default values', function(done) {
 			chai.request(server)
 				.post('/comps')
-				.send({title: 'Primordial Sol'})
+				.send({eat: eat, title: 'Primordial Sol'})
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res.body.year).to.eql(2015);
@@ -60,7 +89,7 @@ describe('Composition DB, API endpoints', function() {
 			beforeEach(function(done) { // jshint ignore: line
 				chai.request(server)
 					.post('/comps')
-					.send({title: 'String Quartet no 5', year: year, composer: 'Bob'})
+					.send({eat: eat, title: 'String Quartet no 5', year: year, composer: 'Bob'})
 					.end(function(err, res) {
 						id = res.body._id;
 						done();
@@ -70,6 +99,7 @@ describe('Composition DB, API endpoints', function() {
 			it('responds to get requests by id', function(done) {
 				chai.request(server)
 					.get('/comps/' + id)
+					.send({eat: eat})
 					.end(function(err, res) {
 						expect(err).to.eql(null);
 						expect(res).to.have.status(200);
@@ -84,7 +114,7 @@ describe('Composition DB, API endpoints', function() {
 			it('responds to put requests', function(done) {
 				chai.request(server)
 					.put('/comps/' + id)
-					.send({title: 'String Quartet no. 9', year: year, composer: 'Bob'})
+					.send({eat: eat, title: 'String Quartet no. 9', year: year, composer: 'Bob'})
 					.end(function(err, res) {
 						expect(err).to.eql(null);
 						expect(res).to.have.status(200);
@@ -96,6 +126,7 @@ describe('Composition DB, API endpoints', function() {
 			it('responds to delete requests', function(done) {
 				chai.request(server)
 					.delete('/comps/' + id)
+					.send({eat: eat})
 					.end(function(err, res) {
 						expect(err).to.eql(null);
 						expect(res).to.have.status(200);
