@@ -1,12 +1,12 @@
 'use strict';
 
-process.env.MONGO_URI = 'mongodb://localhost/compsApp_dev';
+process.env.MONGO_URI = 'mongodb://localhost/compsApp_test';
 require('../server.js');
 var mongoose = require('mongoose');	
 var chai = require('chai');
 var chaihttp = require('chai-http');
-chai.use(chaihttp);
 var expect = chai.expect;
+chai.use(chaihttp);
 
 var server = 'localhost:3000/api/v1';
 
@@ -80,6 +80,7 @@ describe('Composition DB, API endpoints', function() {
 						done();
 					});
 			});
+
 			it('responds to put requests', function(done) {
 				chai.request(server)
 					.put('/comps/' + id)
@@ -91,6 +92,7 @@ describe('Composition DB, API endpoints', function() {
 						done();
 					});
 			});
+
 			it('responds to delete requests', function(done) {
 				chai.request(server)
 					.delete('/comps/' + id)

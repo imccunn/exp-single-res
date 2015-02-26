@@ -1,6 +1,7 @@
 'user strict';
 var bodyparser = require('body-parser');
 var User = require('../models/User');
+var eatAuth = require('../lib/eat_auth');
 
 module.exports = function(app, passport, appSecret) {
   
@@ -8,12 +9,15 @@ module.exports = function(app, passport, appSecret) {
   
   app.post('/create_user', function(req, res) {
     var newUser = new User();
-    newUser.set(req.body.email, req.body.password);
-    newUser.save(function(err, usr) {
+    console.log('create user', newUser);
+    newUser.setProps(req.body.email, req.body.password);
+    // newUser.basic.email = req.body.email;
+    // newUser.basic.password = newUser.generateHash(req.body.password);
+    newUser.save(function(err, user) {
       if (err) {
         res.status(500).send({msg: 'unable to create user'});
       }
-      newUser.generateToken(appSecret, function(err, token){
+      user.generateToken(appSecret, function(err, token){
         if (err) {
           res.status(500).send({msg: 'unable to create user'});
         }

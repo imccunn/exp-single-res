@@ -2,15 +2,16 @@
 
 var Comp = require('../models/Composition');
 var bodyParser = require('body-parser');
+var eatAuth = require('../lib/eat_auth');
 
-module.exports = function(app) {
+module.exports = function(app, appSecret) {
 	app.use(bodyParser.json());
 
 	app.get('/comps', function(req, res) {
 		res.json({'msg': 'Specify an id to access composition records.'});
 	});
 
-	app.get('/comps/:id', function(req, res) {
+	app.get('/comps/:id', eatAuth(appSecret), function(req, res) {
 		Comp.find({_id: req.params.id}, function(err, data) {
 			if (err) {
 				res.statusCode(500).send({'msg': 'Could not retrieve composition.'});
@@ -20,7 +21,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.post('/comps', function(req, res) {
+	app.post('/comps', eatAuth(appSecret), function(req, res) {
 		var newComp = new Comp(req.body);
 		newComp.save(function(err, comp) {
 			if (err) {
@@ -31,7 +32,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.put('/comps/:id', function(req, res) {
+	app.put('/comps/:id', eatAuth(appSecret), function(req, res) {
 		var updatedComp = req.body;
 		delete updatedComp._id;
 		Comp.update({_id: req.params.id}, updatedComp, function(err) {
@@ -43,7 +44,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.delete('/comps/:id', function(req, res) {
+	app.delete('/comps/:id', eatAuth(appSecret), function(req, res) {
 		Comp.remove({_id: req.params.id}, function(err) {
 			if (err) {
 				res.statusCode(500).send({'msg': 'Could not remove composition.'});

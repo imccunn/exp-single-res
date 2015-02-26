@@ -15,11 +15,11 @@ app.set('unique', process.env.SECRET || 'changethis');
 app.use(passport.initialize());
 uAuth(passport);
 
-var genRouter = express.Router();
+var publicRouter = express.Router();
 var compRouter = express.Router();
 var userRouter = express.Router();
 
-indexRoute(genRouter);
+indexRoute(publicRouter);
 compRoutes(compRouter, app.get('unique'));
 
 userRoutes(userRouter, passport, app.get('unique'));
@@ -28,7 +28,7 @@ var endpoint = {
   dev: '/api/v1'
 };
 
-app.use(endpoint['dev'], genRouter);
+app.use(endpoint['dev'], publicRouter);
 app.use(endpoint['dev'], userRouter);
 app.use(endpoint['dev'], compRouter);
 
