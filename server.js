@@ -26,7 +26,8 @@ compRoutes(compRouter, app.get('unique'));
 userRoutes(userRouter, passport, app.get('unique'));
 
 var endpoint = {
-  dev: '/api/v1'
+  dev: '/api/v1',
+  pro: '/api'
 };
 
 app.use(endpoint.dev, publicRouter);
