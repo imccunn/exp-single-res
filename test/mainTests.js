@@ -25,14 +25,16 @@ describe('Composition DB, API endpoints', function() {
 				});
 		});
 	});
-	describe('composition route specific request tests', function() {
+	
+  describe('composition route specific request tests', function() {
 		
 		after(function(done) {
 			mongoose.connection.db.dropDatabase(function() {
 				done();
 			});
 		});
-		var eat;
+		
+    var eat;
 		before(function(done) {
 			chai.request(server)
 				.post('/create_user')
