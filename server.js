@@ -22,7 +22,6 @@ var userRouter = express.Router();
 
 indexRoute(publicRouter);
 compRoutes(compRouter, app.get('unique'));
-
 userRoutes(userRouter, passport, app.get('unique'));
 
 var endpoint = {
